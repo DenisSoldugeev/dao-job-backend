@@ -1,16 +1,16 @@
 import { Controller, Post, Body, UsePipes } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '../../infra/prisma/prisma.service.js';
+import { PrismaService } from 'src/infra/prisma/prisma.service';
 import { validateTelegramInitData } from './telegram.util.js';
-import { ZodValidationPipe } from '../../common/zod.pipe.js';
+import { ZodValidationPipe } from 'src/common/zod.pipe';
 import { z } from 'zod';
 
 const TelegramAuthSchema = z.object({
   initData: z.string().min(1),
 });
 
-@Controller('api/auth')
+@Controller('/auth')
 export class AuthController {
   constructor(
     private prisma: PrismaService,
