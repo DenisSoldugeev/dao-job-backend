@@ -1,0 +1,63 @@
+import { Controller, Post, Body, UsePipes } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../../infra/prisma/prisma.service.js';
+import { validateTelegramInitData } from './telegram.util.js';
+import { ZodValidationPipe } from '../../common/zod.pipe.js';
+import { z } from 'zod';
+
+const TelegramAuthSchema = z.object({
+  initData: z.string().min(1),
+});
+
+@Controller('api/auth')
+export class AuthController {
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
+
+  @Post('telegram')
+  @UsePipes(new ZodValidationPipe(TelegramAuthSchema))
+  async telegram(@Body() body: z.infer<typeof TelegramAuthSchema>) {
+    const botToken = this.configService.get<string>('BOT_TOKEN')!;
+    const tgUser = validateTelegramInitData(body.initData, botToken);
+
+    // Upsert user
+    const user = await this.prisma.user.upsert({
+      where: { tgId: String(tgUser.id) },
+      update: {
+        username: tgUser.username,
+      },
+      create: {
+        tgId: String(tgUser.id),
+        username: tgUser.username,
+      },
+    });
+
+    // Generate JWT
+    const token = await this.jwtService.signAsync(
+      {
+        uid: user.id,
+        tgId: user.tgId,
+      },
+      {
+        secret: this.configService.get('JWT_SECRET'),
+        expiresIn: '2h',
+      },
+    );
+
+    return {
+      token,
+      user: {
+        id: user.id,
+        tgId: user.tgId,
+        username: user.username,
+        role: user.role,
+        ratingAsExec: user.ratingAsExec,
+        ratingAsCust: user.ratingAsCust,
+      },
+    };
+  }
+}
