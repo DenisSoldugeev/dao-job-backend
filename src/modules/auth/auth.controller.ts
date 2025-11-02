@@ -24,7 +24,6 @@ export class AuthController {
     const botToken = this.configService.get<string>('BOT_TOKEN')!;
     const tgUser = validateTelegramInitData(body.initData, botToken);
 
-    // Upsert user
     const user = await this.prisma.user.upsert({
       where: { tgId: String(tgUser.id) },
       update: {
@@ -37,7 +36,7 @@ export class AuthController {
     });
 
     // Generate JWT
-    const token = await this.jwtService.signAsync(
+   const token =  await this.jwtService.signAsync(
       {
         uid: user.id,
         tgId: user.tgId,
@@ -48,16 +47,6 @@ export class AuthController {
       },
     );
 
-    return {
-      token,
-      user: {
-        id: user.id,
-        tgId: user.tgId,
-        username: user.username,
-        role: user.role,
-        ratingAsExec: user.ratingAsExec,
-        ratingAsCust: user.ratingAsCust,
-      },
-    };
+    return { token };
   }
 }
