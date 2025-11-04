@@ -12,6 +12,7 @@ async function main() {
     create: {
       slug: 'development',
       title: 'Разработка',
+      description: 'Создание и разработка веб-приложений, мобильных приложений, сайтов и других цифровых продуктов',
       sort: 1,
       active: true,
     },
@@ -23,6 +24,7 @@ async function main() {
     create: {
       slug: 'design',
       title: 'Дизайн',
+      description: 'Создание визуального контента, дизайн интерфейсов, графический и моушн дизайн',
       sort: 2,
       active: true,
     },
@@ -34,6 +36,7 @@ async function main() {
     create: {
       slug: 'marketing',
       title: 'Маркетинг',
+      description: 'Продвижение продуктов и услуг, работа с социальными сетями, SEO оптимизация и контент-маркетинг',
       sort: 3,
       active: true,
     },

@@ -45,6 +45,7 @@ model Category {
   id              String           @id @default(cuid())
   slug            String           @unique
   title           String
+  description     String           @db.Text
   active          Boolean          @default(true)
   sort            Int              @default(0)
   createdAt       DateTime         @default(now())

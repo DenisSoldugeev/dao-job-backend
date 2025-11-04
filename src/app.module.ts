@@ -4,7 +4,7 @@ import { validateEnv } from './config/env.validation';
 import { PrismaModule } from './infra/prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
-// import { CategoriesModule } from './modules/categories/categories.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 // import { TasksModule } from './modules/tasks/tasks.module';
 // import { ResponsesModule } from './modules/responses/responses.module';
 // import { ReviewsModule } from './modules/reviews/reviews.module';
@@ -19,7 +19,7 @@ import { UsersModule } from './modules/users/users.module';
     PrismaModule,
     AuthModule,
     UsersModule,
-    // CategoriesModule,
+    CategoriesModule,
     // TasksModule,
     // ResponsesModule,
     // ReviewsModule,
